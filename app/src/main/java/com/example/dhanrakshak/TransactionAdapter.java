@@ -33,16 +33,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.category.setText("Category: " + transaction.getCategory());
         holder.amount.setText("₹" + transaction.getAmount());
         holder.date.setText("Date: " + transaction.getDate());
+        holder.type.setText("Type: " + transaction.getType());
 
-        // Color amount based on type
+        // Set amount text color based on type
         if (transaction.getType().equals("Income")) {
             holder.amount.setTextColor(context.getResources().getColor(android.R.color.holo_green_dark));
         } else {
             holder.amount.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
         }
-
-        // Optional: include type in category line or add a separate field
-        holder.type.setText("Type: " + transaction.getType());
     }
 
     @Override
@@ -58,12 +56,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             category = itemView.findViewById(R.id.transactionCategory);
             amount = itemView.findViewById(R.id.transactionAmount);
             date = itemView.findViewById(R.id.transactionDate);
-
-            // Dynamically adding type text view if not in XML
-            type = new TextView(itemView.getContext());
-            ((ViewGroup) itemView).addView(type);
-            type.setTextSize(14);
-            type.setTextColor(itemView.getContext().getResources().getColor(android.R.color.darker_gray));
+            type = itemView.findViewById(R.id.transactionType); // Referencing from XML
         }
     }
 }

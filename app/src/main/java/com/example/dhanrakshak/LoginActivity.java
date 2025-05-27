@@ -4,19 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textfield.TextInputEditText;
+
+import android.widget.TextView;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
-    Button loginButton;
-    CheckBox rememberMe;
+    TextInputEditText email, password;
+    MaterialButton loginButton;
+    MaterialCheckBox rememberMe;
     TextView forgotPassword, signupText;
     DatabaseHelper dbHelper;
     SharedPreferences sharedPreferences;
@@ -31,12 +33,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         rememberMe = findViewById(R.id.rememberMe);
         signupText = findViewById(R.id.signupText);
-        forgotPassword = findViewById(R.id.forgotPassword); // Make sure this exists in XML
+        forgotPassword = findViewById(R.id.forgotPassword);
 
         dbHelper = new DatabaseHelper(this);
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
 
-        loadSavedCredentials(); // Load saved email & password if "Remember Me" was used
+        loadSavedCredentials();
 
         loginButton.setOnClickListener(v -> {
             String userEmail = email.getText().toString().trim();
@@ -57,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                     clearCredentials();
                 }
 
-                // Navigate to Income screen after successful login
                 startActivity(new Intent(LoginActivity.this, AddIncomeActivity.class));
                 finish();
 
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
 
         forgotPassword.setOnClickListener(v -> {
             Toast.makeText(this, "Forgot Password Clicked", Toast.LENGTH_SHORT).show();
-            // You can add ForgotPasswordActivity later if needed
+            // You can navigate to ForgotPasswordActivity here if implemented
         });
     }
 

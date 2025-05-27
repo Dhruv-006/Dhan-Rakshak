@@ -3,7 +3,6 @@ package com.example.dhanrakshak;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -19,11 +19,11 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private TextView totalIncomeText, totalExpenseText, balanceText;
     private RecyclerView transactionRecyclerView;
-    private Button btnDaily, btnWeekly, btnMonthly;
 
     private DatabaseHelper db;
     private TransactionAdapter adapter;
     private List<TransactionModel> transactionList;
+    private TabLayout filterTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,48 +36,51 @@ public class StatisticsActivity extends AppCompatActivity {
         totalExpenseText = findViewById(R.id.totalExpenseText);
         balanceText = findViewById(R.id.balanceText);
         transactionRecyclerView = findViewById(R.id.transactionRecyclerView);
-
-        btnDaily = findViewById(R.id.btnDaily);
-        btnWeekly = findViewById(R.id.btnWeekly);
-        btnMonthly = findViewById(R.id.btnMonthly);
+        filterTabLayout = findViewById(R.id.filterTabLayout);
 
         transactionList = new ArrayList<>();
         adapter = new TransactionAdapter(this, transactionList);
         transactionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         transactionRecyclerView.setAdapter(adapter);
 
-        btnDaily.setOnClickListener(v -> loadStatistics("Daily"));
-        btnWeekly.setOnClickListener(v -> loadStatistics("Weekly"));
-        btnMonthly.setOnClickListener(v -> loadStatistics("Monthly"));
+        // Set TabListener
+        filterTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String filter = tab.getText().toString();
+                loadStatistics(filter);
+            }
 
-        // Load all by default
-        loadStatistics("All");
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
 
-        // ✅ Bottom Navigation setup
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                String filter = tab.getText().toString();
+                loadStatistics(filter);
+            }
+        });
+
+        // Load default data (Daily)
+        loadStatistics("Daily");
+
+        // ✅ Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setSelectedItemId(R.id.nav_statistics);
 
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.nav_statistics) {
-                return true; // Already here
-            } else if (id == R.id.nav_income) {
+            if (id == R.id.nav_statistics) return true;
+            if (id == R.id.nav_income) {
                 startActivity(new Intent(this, AddIncomeActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
             } else if (id == R.id.nav_expense) {
                 startActivity(new Intent(this, AddExpenseActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(this, SettingsActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
-                return true;
             }
-            return false;
+            overridePendingTransition(0, 0);
+            finish();
+            return true;
         });
     }
 
@@ -90,9 +93,9 @@ public class StatisticsActivity extends AppCompatActivity {
         double totalExpense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
         double balance = totalIncome - totalExpense;
 
-        totalIncomeText.setText("Total Income: ₹" + totalIncome);
-        totalExpenseText.setText("Total Expense: ₹" + totalExpense);
-        balanceText.setText("Balance: ₹" + balance);
+        totalIncomeText.setText("₹" + totalIncome);
+        totalExpenseText.setText("₹" + totalExpense);
+        balanceText.setText("₹" + balance);
 
         transactionList.clear();
 

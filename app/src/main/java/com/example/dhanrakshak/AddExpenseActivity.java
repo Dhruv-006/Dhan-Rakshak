@@ -2,13 +2,12 @@ package com.example.dhanrakshak;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,8 +15,10 @@ import java.util.Locale;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
-    EditText editTitle, editAmount, editDate;
+    TextInputEditText editTitle, editAmount, editDate, editNotes;
     Button saveButton;
+    ChipGroup categoryChipGroup;
+    RadioGroup paymentMethodRadioGroup;
     DatabaseHelper dbHelper;
 
     @Override
@@ -28,21 +29,40 @@ public class AddExpenseActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         editAmount = findViewById(R.id.editAmount);
         editDate = findViewById(R.id.editDate);
+        editNotes = findViewById(R.id.editNotes);
         saveButton = findViewById(R.id.saveButton);
+        categoryChipGroup = findViewById(R.id.categoryChipGroup);
+        paymentMethodRadioGroup = findViewById(R.id.paymentMethodRadioGroup);
         dbHelper = new DatabaseHelper(this);
 
-        // ✅ Auto-fill today's date
+        // Auto-fill today's date
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String todayDate = sdf.format(new Date());
-        editDate.setText(todayDate);
+        editDate.setText(sdf.format(new Date()));
 
         saveButton.setOnClickListener(v -> {
             String title = editTitle.getText().toString().trim();
             String amount = editAmount.getText().toString().trim();
             String date = editDate.getText().toString().trim();
+            String notes = editNotes.getText().toString().trim();
 
-            if (title.isEmpty() || amount.isEmpty() || date.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            // Get selected category chip text
+            int selectedChipId = categoryChipGroup.getCheckedChipId();
+            String category = null;
+            if (selectedChipId != -1) {
+                Chip selectedChip = findViewById(selectedChipId);
+                category = selectedChip.getText().toString();
+            }
+
+            // Get selected payment method
+            int selectedPaymentId = paymentMethodRadioGroup.getCheckedRadioButtonId();
+            String paymentMethod = null;
+            if (selectedPaymentId != -1) {
+                RadioButton selectedRadio = findViewById(selectedPaymentId);
+                paymentMethod = selectedRadio.getText().toString();
+            }
+
+            if (title.isEmpty() || amount.isEmpty() || date.isEmpty() || category == null || paymentMethod == null) {
+                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -51,11 +71,12 @@ public class AddExpenseActivity extends AppCompatActivity {
                 return;
             }
 
-            boolean success = dbHelper.insertExpense(title, amount, date);
+            // Save to database
+            boolean success = dbHelper.insertExpense(title, amount, date, category, paymentMethod, notes);
+
             if (success) {
                 Toast.makeText(this, "Expense saved successfully!", Toast.LENGTH_SHORT).show();
                 clearInputs();
-                // Reset date after clear
                 editDate.setText(sdf.format(new Date()));
             } else {
                 Toast.makeText(this, "Failed to save expense", Toast.LENGTH_SHORT).show();
@@ -68,7 +89,9 @@ public class AddExpenseActivity extends AppCompatActivity {
     private void clearInputs() {
         editTitle.setText("");
         editAmount.setText("");
-        editDate.setText("");
+        editNotes.setText("");
+        categoryChipGroup.clearCheck();
+        paymentMethodRadioGroup.clearCheck();
     }
 
     private void setupBottomNavigation() {

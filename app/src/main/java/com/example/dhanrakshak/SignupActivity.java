@@ -2,13 +2,20 @@ package com.example.dhanrakshak;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.*;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textfield.TextInputEditText;
+
+import android.widget.TextView;
 
 public class SignupActivity extends AppCompatActivity {
 
-    EditText name, email, password, confirmPassword;
-    Button signupButton;
+    TextInputEditText name, email, password, confirmPassword;
+    MaterialCheckBox termsCheckbox;
+    MaterialButton signupButton;
     TextView loginText;
     DatabaseHelper dbHelper;
 
@@ -17,14 +24,18 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        // Material Text Fields
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
+
+        // Material Components
+        termsCheckbox = findViewById(R.id.termsCheckbox);
         signupButton = findViewById(R.id.signupButton);
         loginText = findViewById(R.id.loginText);
 
-        dbHelper = new DatabaseHelper(this); // Initialize the database helper
+        dbHelper = new DatabaseHelper(this);
 
         signupButton.setOnClickListener(v -> {
             String userName = name.getText().toString().trim();
@@ -36,8 +47,9 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else if (!userPassword.equals(userConfirmPassword)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            } else if (!termsCheckbox.isChecked()) {
+                Toast.makeText(this, "Please agree to the Terms & Conditions", Toast.LENGTH_SHORT).show();
             } else {
-                // Save user to SQLite
                 boolean isRegistered = dbHelper.registerUser(userEmail, userPassword);
                 if (isRegistered) {
                     Toast.makeText(this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();

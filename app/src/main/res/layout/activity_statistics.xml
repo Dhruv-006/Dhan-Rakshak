@@ -4,88 +4,297 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:background="#F8F9FA">
 
-    <LinearLayout
-        android:id="@+id/statsContainer"
+    <!-- App Bar / Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_above="@id/bottomNavigationView"
-        android:layout_alignParentTop="true"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="16dp">
+        android:elevation="4dp">
 
-        <!-- Filter Buttons -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1976D2"
+            app:title="Statistics"
+            app:titleTextColor="#FFFFFF">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/calendarIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/ic_calendar"
+                android:tint="#FFFFFF"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_below="@id/appBarLayout"
+        android:clipToPadding="false">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="16dp">
-`
-            <Button
-                android:id="@+id/btnDaily"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daily"
-                android:layout_margin="8dp" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <Button
-                android:id="@+id/btnWeekly"
-                android:layout_width="wrap_content"
+            <!-- Time Period Filter Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Weekly"
-                android:layout_margin="8dp" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
-            <Button
-                android:id="@+id/btnMonthly"
-                android:layout_width="wrap_content"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/filterTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabMode="fixed"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="#1976D2"
+                    app:tabSelectedTextColor="#1976D2"
+                    app:tabTextColor="#757575">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daily" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weekly" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monthly" />
+                </com.google.android.material.tabs.TabLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Summary Dashboard Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Monthly"
-                android:layout_margin="8dp" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Summary"
+                        android:textColor="#1976D2"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Balance Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginBottom="16dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="#E3F2FD">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="BALANCE"
+                                android:textSize="14sp"
+                                android:textColor="#757575" />
+
+                            <TextView
+                                android:id="@+id/balanceText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹0"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                android:textColor="#1976D2" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Income & Expense Cards -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
+
+                        <!-- Income Card -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:cardBackgroundColor="#E8F5E9">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="INCOME"
+                                    android:textSize="12sp"
+                                    android:textColor="#757575" />
+
+                                <TextView
+                                    android:id="@+id/totalIncomeText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="₹0"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#4CAF50" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Expense Card -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:cardBackgroundColor="#FFEBEE">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="EXPENSE"
+                                    android:textSize="12sp"
+                                    android:textColor="#757575" />
+
+                                <TextView
+                                    android:id="@+id/totalExpenseText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="₹0"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#F44336" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Chart Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Income vs Expense"
+                        android:textColor="#1976D2"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <FrameLayout
+                        android:id="@+id/chartContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="#FAFAFA" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Recent Transactions -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Recent Transactions"
+                            android:textColor="#1976D2"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/viewAllText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All"
+                            android:textColor="#1976D2"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/transactionRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-        <!-- Text Summary -->
-        <TextView
-            android:id="@+id/totalIncomeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Income: ₹0"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#4CAF50"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/totalExpenseText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Expense: ₹0"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#F44336"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/balanceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Balance: ₹0"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#0D47A1"
-            android:layout_marginBottom="16dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/transactionRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="16dp" />
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -93,8 +302,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
+        android:background="#FFFFFF"
+        app:itemIconTint="@color/bottom_nav_colors"
+        app:itemTextColor="@color/bottom_nav_colors"
+        app:elevation="8dp"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
-
 </RelativeLayout>

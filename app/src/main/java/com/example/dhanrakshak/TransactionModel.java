@@ -1,19 +1,37 @@
 package com.example.dhanrakshak;
 
-public class TransactionModel {
-    private int id;              // Unique ID
-    private String type;         // "Income" or "Expense"
-    private String category;
-    private String amount;
-    private String date;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    // Constructor
-    public TransactionModel(int id, String type, String category, String amount, String date) {
+public class TransactionModel {
+    private int id;               // Unique ID
+    private String type;          // "Income" or "Expense"
+    private String category;      // Consider using Enum for better type safety
+    private BigDecimal amount;    // Store amount as BigDecimal to prevent precision issues
+    private Date date;            // Store date as Date object for proper handling
+
+    // Constructor with String amount and date
+    public TransactionModel(int id, String type, String category, String amountStr, String dateStr) {
         this.id = id;
         this.type = type;
         this.category = category;
-        this.amount = amount;
-        this.date = date;
+
+        try {
+            this.amount = new BigDecimal(amountStr);
+        } catch (NumberFormatException e) {
+            this.amount = BigDecimal.ZERO; // fallback
+            e.printStackTrace();
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            this.date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            this.date = new Date(); // fallback to current date
+            e.printStackTrace();
+        }
     }
 
     // Getters
@@ -29,11 +47,11 @@ public class TransactionModel {
         return category;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -50,12 +68,18 @@ public class TransactionModel {
         this.category = category;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    // Method to format date as String
+    public String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date);
     }
 
     // Debugging/Logging Helper
@@ -65,8 +89,8 @@ public class TransactionModel {
                 "id=" + id +
                 ", type='" + type + '\'' +
                 ", category='" + category + '\'' +
-                ", amount='" + amount + '\'' +
-                ", date='" + date + '\'' +
+                ", amount=" + amount +
+                ", date=" + getFormattedDate() +
                 '}';
     }
 }
