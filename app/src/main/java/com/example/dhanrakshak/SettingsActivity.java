@@ -61,7 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Clear all financial data
         btnClearData.setOnClickListener(v -> {
-            // Logic to clear all financial data
+            DatabaseHelper dbHelper = new DatabaseHelper(SettingsActivity.this);
+            dbHelper.clearAllFinancialData(); // Clears income and expense data
             Toast.makeText(this, "All data cleared!", Toast.LENGTH_SHORT).show();
         });
 

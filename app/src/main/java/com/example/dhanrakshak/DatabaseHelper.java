@@ -190,69 +190,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Helper method to get the start and end date for daily, weekly, or monthly views
-    public String[] getDateRange(String filterType) {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String[] dateRange = new String[2];
-
-        switch (filterType) {
-            case "daily":
-                dateRange[0] = sdf.format(calendar.getTime());
-                dateRange[1] = dateRange[0];
-                break;
-
-            case "weekly":
-                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                dateRange[0] = sdf.format(calendar.getTime());
-                calendar.add(Calendar.DATE, 6);
-                dateRange[1] = sdf.format(calendar.getTime());
-                break;
-
-            case "monthly":
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                dateRange[0] = sdf.format(calendar.getTime());
-                calendar.add(Calendar.MONTH, 1);
-                calendar.set(Calendar.DAY_OF_MONTH, 0);
-                dateRange[1] = sdf.format(calendar.getTime());
-                break;
-        }
-
-        return dateRange;
-    }
-
-    // Update Income
-    public boolean updateIncome(int id, String title, String amount, String date) {
+    public void clearAllFinancialData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, title);
-        values.put(COLUMN_AMOUNT, amount);
-        values.put(COLUMN_DATE, date);
-        return db.update(TABLE_INCOME, values, COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+        db.delete(TABLE_INCOME, null, null);
+        db.delete(TABLE_EXPENSE, null, null);
     }
 
-    // Update Expense
-    public boolean updateExpense(int id, String title, String amount, String date, String category, String paymentMethod, String notes) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, title);
-        values.put(COLUMN_AMOUNT, amount);
-        values.put(COLUMN_DATE, date);
-        values.put(COLUMN_CATEGORY, category);
-        values.put(COLUMN_PAYMENT_METHOD, paymentMethod);
-        values.put(COLUMN_NOTES, notes);
-        return db.update(TABLE_EXPENSE, values, COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0;
-    }
-
-    // Delete Income
-    public boolean deleteIncomeById(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_INCOME, COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0;
-    }
-
-    // Delete Expense
-    public boolean deleteExpenseById(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_EXPENSE, COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0;
-    }
 }
