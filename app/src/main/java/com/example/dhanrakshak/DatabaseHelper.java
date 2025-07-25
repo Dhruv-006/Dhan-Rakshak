@@ -6,18 +6,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    public static final String TABLE_INCOME = "income";
+    public static final String TABLE_EXPENSE = "expense";
 
     public static final String DATABASE_NAME = "DhanRakshak.db";
     public static final int DATABASE_VERSION = 4;  // Updated version
 
     // Table and Column Names
     public static final String TABLE_USERS = "users";
-    public static final String TABLE_INCOME = "income";
-    public static final String TABLE_EXPENSE = "expense";
+//    public static final String TABLE_INCOME = "income";
+//    public static final String TABLE_EXPENSE = "expense";
 
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
@@ -25,14 +26,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_CATEGORY = "category";  // New Column for category
-    public static final String COLUMN_PAYMENT_METHOD = "payment_method";  // New Column for payment method
+    public static final String COLUMN_CATEGORY = "category";
+    public static final String COLUMN_PAYMENT_METHOD = "payment_method";
     public static final String COLUMN_NOTES = "notes";
-    public static final String COLUMN_TYPE = "type";  // New Column for type
+    public static final String COLUMN_TYPE = "type";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, 4);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -59,7 +61,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATE + " TEXT, " +
                 COLUMN_CATEGORY + " TEXT, " +
                 COLUMN_PAYMENT_METHOD + " TEXT, " +
-                COLUMN_NOTES + " TEXT)");
+                COLUMN_NOTES + " TEXT, " +
+                COLUMN_TYPE + " TEXT)");
+
     }
 
     @Override
@@ -84,6 +88,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             if (!columnExists(db, TABLE_EXPENSE, COLUMN_NOTES)) {
                 db.execSQL("ALTER TABLE " + TABLE_EXPENSE + " ADD COLUMN " + COLUMN_NOTES + " TEXT");
+            }
+
+            if (!columnExists(db, TABLE_EXPENSE, COLUMN_TYPE)) {
+                db.execSQL("ALTER TABLE " + TABLE_EXPENSE + " ADD COLUMN " + COLUMN_TYPE + " TEXT");
             }
         }
     }
@@ -122,14 +130,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // Insert Income (Updated to include category, notes, and type)
-    public boolean insertIncome(String title, String amount, String date, String category, String notes) {
+    public boolean insertIncome(String title, String amount, String date, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_AMOUNT, amount);
         values.put(COLUMN_DATE, date);
-        values.put(COLUMN_CATEGORY, category);
         values.put(COLUMN_NOTES, notes);
         values.put(COLUMN_TYPE, "Income");
 
@@ -138,15 +144,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert Expense (Updated to handle category, payment method, and notes)
-    public boolean insertExpense(String title, String amount, String date, String category, String paymentMethod, String notes) {
+    public boolean insertExpense(String title, String amount, String date, String paymentMethod, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_AMOUNT, amount);
         values.put(COLUMN_DATE, date);
-        values.put(COLUMN_CATEGORY, category);
-        values.put(COLUMN_PAYMENT_METHOD, paymentMethod);
         values.put(COLUMN_NOTES, notes);
+        values.put(COLUMN_PAYMENT_METHOD, paymentMethod);
+        values.put(COLUMN_TYPE, "Expense");
         return db.insert(TABLE_EXPENSE, null, values) != -1;
     }
 
@@ -195,5 +201,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_INCOME, null, null);
         db.delete(TABLE_EXPENSE, null, null);
     }
+
+
 
 }

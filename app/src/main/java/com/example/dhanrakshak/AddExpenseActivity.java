@@ -17,7 +17,6 @@ public class AddExpenseActivity extends AppCompatActivity {
 
     TextInputEditText editTitle, editAmount, editDate, editNotes;
     Button saveButton;
-    ChipGroup categoryChipGroup;
     RadioGroup paymentMethodRadioGroup;
     DatabaseHelper dbHelper;
 
@@ -31,7 +30,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         editDate = findViewById(R.id.editDate);
         editNotes = findViewById(R.id.editNotes);
         saveButton = findViewById(R.id.saveButton);
-        categoryChipGroup = findViewById(R.id.categoryChipGroup);
         paymentMethodRadioGroup = findViewById(R.id.paymentMethodRadioGroup);
         dbHelper = new DatabaseHelper(this);
 
@@ -45,14 +43,6 @@ public class AddExpenseActivity extends AppCompatActivity {
             String date = editDate.getText().toString().trim();
             String notes = editNotes.getText().toString().trim();
 
-            // Get selected category chip text
-            int selectedChipId = categoryChipGroup.getCheckedChipId();
-            String category = null;
-            if (selectedChipId != -1) {
-                Chip selectedChip = findViewById(selectedChipId);
-                category = selectedChip.getText().toString();
-            }
-
             // Get selected payment method
             int selectedPaymentId = paymentMethodRadioGroup.getCheckedRadioButtonId();
             String paymentMethod = null;
@@ -61,7 +51,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 paymentMethod = selectedRadio.getText().toString();
             }
 
-            if (title.isEmpty() || amount.isEmpty() || date.isEmpty() || category == null || paymentMethod == null) {
+            if (title.isEmpty() || amount.isEmpty() || date.isEmpty() || paymentMethod == null) {
                 Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -72,7 +62,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             }
 
             // Save to database
-            boolean success = dbHelper.insertExpense(title, amount, date, category, paymentMethod, notes);
+            boolean success = dbHelper.insertExpense(title, amount, date, paymentMethod, notes);
 
             if (success) {
                 Toast.makeText(this, "Expense saved successfully!", Toast.LENGTH_SHORT).show();
@@ -90,7 +80,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         editTitle.setText("");
         editAmount.setText("");
         editNotes.setText("");
-        categoryChipGroup.clearCheck();
         paymentMethodRadioGroup.clearCheck();
     }
 

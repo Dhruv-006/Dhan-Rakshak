@@ -35,8 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         tvDescription = findViewById(R.id.tvDescription);
         tvUserEmail = findViewById(R.id.tvUserEmail);
-        notificationSwitch = findViewById(R.id.notificationSwitch);
-        themeSwitch = findViewById(R.id.themeSwitch);
 
         // Load user info from SharedPreferences
         sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);

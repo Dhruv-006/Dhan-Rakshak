@@ -15,7 +15,6 @@ import java.util.Locale;
 public class AddIncomeActivity extends AppCompatActivity {
 
     TextInputEditText editTitle, editAmount, editDate, editNotes;
-    RadioGroup categoryRadioGroup;
     Button saveButton;
     DatabaseHelper dbHelper;
 
@@ -29,7 +28,6 @@ public class AddIncomeActivity extends AppCompatActivity {
         editAmount = findViewById(R.id.editAmount);
         editDate = findViewById(R.id.editDate);
         editNotes = findViewById(R.id.editNotes);
-        categoryRadioGroup = findViewById(R.id.categoryRadioGroup);
         saveButton = findViewById(R.id.saveButton);
         dbHelper = new DatabaseHelper(this);
 
@@ -45,14 +43,7 @@ public class AddIncomeActivity extends AppCompatActivity {
             String date = editDate.getText().toString().trim();
             String notes = editNotes.getText().toString().trim();
 
-            int selectedCategoryId = categoryRadioGroup.getCheckedRadioButtonId();
-            if (selectedCategoryId == -1) {
-                Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-            RadioButton selectedRadio = findViewById(selectedCategoryId);
-            String category = selectedRadio.getText().toString();
 
             if (title.isEmpty() || amount.isEmpty() || date.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
@@ -64,7 +55,7 @@ public class AddIncomeActivity extends AppCompatActivity {
                 return;
             }
 
-            boolean success = dbHelper.insertIncome(title, amount, date, category, notes);
+            boolean success = dbHelper.insertIncome(title, amount, date, notes);
             if (success) {
                 Toast.makeText(this, "Income saved successfully!", Toast.LENGTH_SHORT).show();
                 clearInputs();
@@ -100,6 +91,5 @@ public class AddIncomeActivity extends AppCompatActivity {
         editTitle.setText("");
         editAmount.setText("");
         editNotes.setText("");
-        categoryRadioGroup.clearCheck();
     }
 }

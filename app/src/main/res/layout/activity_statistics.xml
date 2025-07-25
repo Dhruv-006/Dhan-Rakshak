@@ -240,11 +240,19 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
-                    <FrameLayout
-                        android:id="@+id/chartContainer"
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:background="#FAFAFA" />
+                        android:layout_marginTop="16dp"/>
+
+<!--                    <FrameLayout-->
+<!--                        android:id="@+id/chartContainer"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="200dp"-->
+<!--                        android:background="#FAFAFA" />-->
+
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

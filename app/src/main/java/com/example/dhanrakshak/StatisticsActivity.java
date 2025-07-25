@@ -2,6 +2,7 @@ package com.example.dhanrakshak;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,16 +10,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+//import com.github.mikephil.charting.data.BarEntry;
+//import com.github.mikephil.charting.data.BarDataSet;
+//import com.github.mikephil.charting.data.BarData;
+import android.graphics.Color;
+
+
+
 public class StatisticsActivity extends AppCompatActivity {
 
     private TextView totalIncomeText, totalExpenseText, balanceText;
     private RecyclerView transactionRecyclerView;
+
+    private BarChart barChart;
+    private DatabaseHelper dbHelper;
 
     private DatabaseHelper db;
     private TransactionAdapter adapter;
@@ -31,10 +48,12 @@ public class StatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
 
         db = new DatabaseHelper(this);
+        dbHelper = new DatabaseHelper(this);
 
         totalIncomeText = findViewById(R.id.totalIncomeText);
         totalExpenseText = findViewById(R.id.totalExpenseText);
         balanceText = findViewById(R.id.balanceText);
+        barChart = findViewById(R.id.barChart);
         transactionRecyclerView = findViewById(R.id.transactionRecyclerView);
         filterTabLayout = findViewById(R.id.filterTabLayout);
 
@@ -84,6 +103,20 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
+    private void fetchAndAddTransactions(String tableName, String type, String startDate, String endDate) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " WHERE date BETWEEN ? AND ?", new String[]{startDate, endDate});
+
+        while (cursor.moveToNext()) {
+            float amount = cursor.getFloat(cursor.getColumnIndexOrThrow("amount"));
+            String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+        }
+
+        cursor.close();
+    }
+
+
+
     private void loadStatistics(String filterType) {
         String[] range = getDateRange(filterType);
         String startDate = range[0];
@@ -97,34 +130,43 @@ public class StatisticsActivity extends AppCompatActivity {
         totalExpenseText.setText("₹" + totalExpense);
         balanceText.setText("₹" + balance);
 
-        transactionList.clear();
+        // Chart
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, (float) totalIncome));
+        entries.add(new BarEntry(1f, (float) totalExpense));
+        entries.add(new BarEntry(2f, (float) balance));
 
+        BarDataSet dataSet = new BarDataSet(entries, "Statistics");
+        dataSet.setColors(new int[]{Color.GREEN, Color.RED, Color.BLUE});
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(12f);
+
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
+        barChart.getDescription().setEnabled(false);
+        barChart.getXAxis().setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) value); // or use your custom label list
+            }
+        });
+
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getXAxis().setGranularity(1f);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.animateY(1000);
+        barChart.invalidate();
+
+        // Recycler data
+        transactionList.clear();
         fetchAndAddTransactions(DatabaseHelper.TABLE_INCOME, "Income", startDate, endDate);
         fetchAndAddTransactions(DatabaseHelper.TABLE_EXPENSE, "Expense", startDate, endDate);
-
         adapter.notifyDataSetChanged();
     }
 
-    private void fetchAndAddTransactions(String tableName, String type, String startDate, String endDate) {
-        Cursor cursor = db.getTransactions(tableName, startDate, endDate);
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID);
-            int titleIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TITLE);
-            int amountIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_AMOUNT);
-            int dateIndex = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE);
 
-            do {
-                int id = cursor.getInt(idIndex);
-                String category = cursor.getString(titleIndex);
-                String amount = cursor.getString(amountIndex);
-                String date = cursor.getString(dateIndex);
-
-                TransactionModel model = new TransactionModel(id, type, category, amount, date);
-                transactionList.add(model);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-    }
 
     private String[] getDateRange(String filterType) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
