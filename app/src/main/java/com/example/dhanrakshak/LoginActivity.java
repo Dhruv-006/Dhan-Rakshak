@@ -26,8 +26,24 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize sharedPreferences first
+        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+
+        // 🟢 Check if user is already logged in
+        boolean isRemembered = sharedPreferences.getBoolean("remember", false);
+        if (isRemembered) {
+            // If already logged in, go to main screen
+            Intent intent = new Intent(LoginActivity.this, AddIncomeActivity.class);
+            startActivity(intent);
+            finish();  // Finish LoginActivity so user can't go back to it
+            return;
+        }
+
+        // Only setContentView if not already logged in
         setContentView(R.layout.activity_login);
 
+        // 🔽 Initialize views
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
@@ -36,9 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword = findViewById(R.id.forgotPassword);
 
         dbHelper = new DatabaseHelper(this);
-        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
-
-        loadSavedCredentials();
 
         loginButton.setOnClickListener(v -> {
             String userEmail = email.getText().toString().trim();
@@ -76,7 +89,10 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Forgot Password Clicked", Toast.LENGTH_SHORT).show();
             // You can navigate to ForgotPasswordActivity here if implemented
         });
+
+        loadSavedCredentials(); // Moved here so it doesn't run if auto-login happens
     }
+
 
     private void saveCredentials(String userEmail, String userPassword) {
         SharedPreferences.Editor editor = sharedPreferences.edit();

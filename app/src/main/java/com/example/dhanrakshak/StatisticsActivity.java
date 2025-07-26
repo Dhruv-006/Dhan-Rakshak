@@ -147,7 +147,7 @@ public class StatisticsActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return String.valueOf((int) value); // or use your custom label list
+                return String.valueOf((int) value);
             }
         });
 
