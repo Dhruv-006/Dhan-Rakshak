@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -25,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         super.onCreate(savedInstanceState);
 
         // Initialize sharedPreferences first
@@ -86,11 +89,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         forgotPassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot Password Clicked", Toast.LENGTH_SHORT).show();
-            // You can navigate to ForgotPasswordActivity here if implemented
+            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
 
-        loadSavedCredentials(); // Moved here so it doesn't run if auto-login happens
+
+        loadSavedCredentials();
     }
 
 

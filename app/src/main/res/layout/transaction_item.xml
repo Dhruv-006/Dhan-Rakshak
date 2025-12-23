@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#673AB7" />
+            app:tint="?attr/colorPrimary" />
 
         <!-- Transaction Details -->
         <LinearLayout
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Category"
-                android:textColor="#212121"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -53,17 +53,16 @@
                 android:text="Type"
                 android:textColor="#FF5722"
                 android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
-
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/transactionDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Transaction description"
-                android:textColor="#757575"
-                android:textSize="14sp" />
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginTop="4dp" />
 
             <TextView
                 android:id="@+id/transactionDate"
@@ -80,8 +79,8 @@
             android:id="@+id/transactionAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="₹1,250"
-            android:textColor="#673AB7"
+            android:text="1,250"
+            android:textColor="?attr/colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

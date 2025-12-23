@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F8FA">
+    android:background="?attr/colorSurfaceVariant">
 
-    <!-- App Bar / Toolbar -->
+    <!-- App Bar Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -16,17 +16,17 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#6200EE"
+            android:background="?attr/colorPrimary"
             app:title="Add Income"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="@android:color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavigationView"
-        android:layout_below="@id/appBarLayout"
+        android:layout_above="@+id/bottomNavigationView"
+        android:layout_below="@+id/appBarLayout"
         android:clipToPadding="false"
         android:padding="24dp">
 
@@ -53,7 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Income Details"
-                        android:textColor="#6200EE"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
@@ -63,8 +63,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="#6200EE"
-                        app:hintTextColor="#6200EE"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -81,8 +81,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="#6200EE"
-                        app:hintTextColor="#6200EE"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         app:prefixText="$"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -100,11 +100,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="#6200EE"
-                        app:hintTextColor="#6200EE"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_calendar"
-                        app:endIconTint="#6200EE"
+                        app:endIconTint="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -136,8 +136,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeColor="#6200EE"
-                        app:hintTextColor="#6200EE"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -161,7 +161,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="28dp"
-                app:backgroundTint="#6200EE"
+                app:backgroundTint="?attr/colorPrimary"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp" />
         </LinearLayout>
@@ -173,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
+        android:background="@android:color/white"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:elevation="8dp"

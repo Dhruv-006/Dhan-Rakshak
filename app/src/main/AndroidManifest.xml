@@ -14,6 +14,9 @@
         android:theme="@style/Theme.DhanRakshak"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity

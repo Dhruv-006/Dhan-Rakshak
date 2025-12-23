@@ -1,3 +1,4 @@
+
 package com.example.dhanrakshak;
 
 import android.content.Intent;
@@ -33,10 +34,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private TextView totalIncomeText, totalExpenseText, balanceText;
     private RecyclerView transactionRecyclerView;
-
     private BarChart barChart;
     private DatabaseHelper dbHelper;
-
     private DatabaseHelper db;
     private TransactionAdapter adapter;
     private List<TransactionModel> transactionList;
@@ -137,7 +136,11 @@ public class StatisticsActivity extends AppCompatActivity {
         entries.add(new BarEntry(2f, (float) balance));
 
         BarDataSet dataSet = new BarDataSet(entries, "Statistics");
-        dataSet.setColors(new int[]{Color.GREEN, Color.RED, Color.BLUE});
+        dataSet.setColors(new int[]{
+                Color.parseColor("#4CAF50"),  // Income green
+                Color.parseColor("#F44336"),  // Expense red
+                Color.parseColor("#FF9800")   // Balance orange
+        });
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueTextSize(12f);
 

@@ -11,7 +11,7 @@ public class TransactionModel {
     private String category;      // Consider using Enum for better type safety
     private BigDecimal amount;    // Store amount as BigDecimal to prevent precision issues
     private Date date;            // Store date as Date object for proper handling
-
+    private String notes;
     // Constructor with String amount and date
     public TransactionModel(int id, String type, String category, String amountStr, String dateStr) {
         this.id = id;
@@ -33,6 +33,27 @@ public class TransactionModel {
             e.printStackTrace();
         }
     }
+
+    public TransactionModel(String type, float amount, String dateStr, String category) {
+        this.type = type;
+        this.category = category;
+
+        try {
+            this.amount = new BigDecimal(String.valueOf(amount));
+        } catch (NumberFormatException e) {
+            this.amount = BigDecimal.ZERO;
+            e.printStackTrace();
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            this.date = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            this.date = new Date();
+            e.printStackTrace();
+        }
+    }
+
 
     // Getters
     public int getId() {
@@ -93,4 +114,9 @@ public class TransactionModel {
                 ", date=" + getFormattedDate() +
                 '}';
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
 }

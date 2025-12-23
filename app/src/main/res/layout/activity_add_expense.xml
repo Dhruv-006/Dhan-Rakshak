@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="?attr/colorSurfaceVariant">
 
-    <!-- App Bar / Toolbar -->
+    <!-- App Bar Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -16,17 +16,17 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#D32F2F"
+            android:background="?attr/colorPrimary"
             app:title="Add Expense"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="@android:color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavigationView"
-        android:layout_below="@id/appBarLayout"
+        android:layout_above="@+id/bottomNavigationView"
+        android:layout_below="@+id/appBarLayout"
         android:clipToPadding="false"
         android:padding="16dp">
 
@@ -53,7 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Expense Details"
-                        android:textColor="#D32F2F"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
@@ -63,8 +63,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="#D32F2F"
-                        app:hintTextColor="#D32F2F"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -81,8 +81,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="#D32F2F"
-                        app:hintTextColor="#D32F2F"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         app:prefixText="$"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -99,11 +99,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeColor="#D32F2F"
-                        app:hintTextColor="#D32F2F"
+                        android:layout_marginBottom="16dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_calendar"
-                        app:endIconTint="#D32F2F"
+                        app:endIconTint="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -136,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment Method"
-                        android:textColor="#D32F2F"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
@@ -152,7 +153,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cash"
-                            android:buttonTint="#D32F2F"
+                            android:buttonTint="?attr/colorPrimary"
                             android:layout_weight="1" />
 
                         <RadioButton
@@ -160,7 +161,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Card"
-                            android:buttonTint="#D32F2F"
+                            android:buttonTint="?attr/colorPrimary"
                             android:layout_weight="1" />
 
                         <RadioButton
@@ -168,7 +169,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Other"
-                            android:buttonTint="#D32F2F"
+                            android:buttonTint="?attr/colorPrimary"
                             android:layout_weight="1" />
                     </RadioGroup>
                 </LinearLayout>
@@ -191,8 +192,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeColor="#D32F2F"
-                        app:hintTextColor="#D32F2F"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -215,7 +216,7 @@
                 android:text="SAVE EXPENSE"
                 android:textSize="16sp"
                 app:cornerRadius="28dp"
-                app:backgroundTint="#D32F2F"
+                app:backgroundTint="?attr/colorPrimary"
                 android:letterSpacing="0.05"
                 android:layout_marginBottom="16dp" />
         </LinearLayout>
@@ -227,7 +228,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
+        android:background="@android:color/white"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:elevation="8dp"

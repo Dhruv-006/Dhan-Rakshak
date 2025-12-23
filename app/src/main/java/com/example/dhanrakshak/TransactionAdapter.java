@@ -32,7 +32,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.category.setText("Category: " + transaction.getCategory());
         holder.amount.setText("₹" + transaction.getAmount());
-        holder.date.setText("Date: " + transaction.getDate());
+        holder.date.setText("Date: " + transaction.getFormattedDate());
         holder.type.setText("Type: " + transaction.getType());
 
         // Set amount text color based on type
@@ -40,6 +40,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.amount.setTextColor(context.getResources().getColor(android.R.color.holo_green_dark));
         } else {
             holder.amount.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+        }
+
+        // Show/hide description
+        String notes = transaction.getNotes();
+        if (notes != null && !notes.trim().isEmpty()) {
+            holder.description.setText(notes);
+            holder.description.setVisibility(View.VISIBLE);
+        } else {
+            holder.description.setVisibility(View.GONE);
         }
     }
 
@@ -49,14 +58,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView category, amount, date, type;
+        TextView category, amount, date, type, description;
 
         public ViewHolder(View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.transactionCategory);
             amount = itemView.findViewById(R.id.transactionAmount);
             date = itemView.findViewById(R.id.transactionDate);
-            type = itemView.findViewById(R.id.transactionType); // Referencing from XML
+            type = itemView.findViewById(R.id.transactionType);
+            description = itemView.findViewById(R.id.transactionDescription); // ✅ Fixed
         }
     }
 }
