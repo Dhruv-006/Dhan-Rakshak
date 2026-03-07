@@ -21,8 +21,9 @@
 
         <!-- System Bars -->
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
-        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/nav_background</item>
 
         <!-- Error -->
         <item name="colorError">@color/error</item>

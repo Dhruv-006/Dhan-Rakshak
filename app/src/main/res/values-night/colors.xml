@@ -3,59 +3,81 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Palette (Teal - lighter for dark mode readability) -->
-    <color name="primary">#4DB6AC</color>
-    <color name="primary_dark">#00897B</color>
-    <color name="primary_light">#1A3A36</color>
-    <color name="primary_container">#1A3A36</color>
-    <color name="on_primary">#003731</color>
-    <color name="on_primary_container">#B2DFDB</color>
+    <!-- Primary Palette (Emerald Green - brighter for dark mode) -->
+    <color name="primary">#34D399</color>
+    <color name="primary_dark">#10B981</color>
+    <color name="primary_light">#064E3B</color>
+    <color name="primary_container">#064E3B</color>
+    <color name="on_primary">#064E3B</color>
+    <color name="on_primary_container">#A7F3D0</color>
 
-    <!-- Secondary Palette -->
-    <color name="secondary">#FFD54F</color>
-    <color name="secondary_container">#3E2723</color>
-    <color name="on_secondary">#3E2723</color>
+    <!-- Secondary Palette (Blue - lighter for dark mode) -->
+    <color name="secondary">#60A5FA</color>
+    <color name="secondary_light">#93C5FD</color>
+    <color name="secondary_container">#1E3A5F</color>
+    <color name="on_secondary">#1E3A5F</color>
+    <color name="on_secondary_container">#BFDBFE</color>
 
     <!-- Background & Surface -->
-    <color name="background">#121212</color>
-    <color name="surface">#1E1E1E</color>
-    <color name="surface_variant">#2C2C2C</color>
-    <color name="on_surface">#E0E0E0</color>
-    <color name="on_surface_variant">#BDBDBD</color>
-    <color name="outline">#424242</color>
-    <color name="card_background">#1E1E1E</color>
+    <color name="background">#0F172A</color>
+    <color name="surface">#1E293B</color>
+    <color name="surface_variant">#334155</color>
+    <color name="on_surface">#F1F5F9</color>
+    <color name="on_surface_variant">#94A3B8</color>
+    <color name="outline">#475569</color>
+    <color name="card_background">#1E293B</color>
+    <color name="card_glass">#331E293B</color>
 
     <!-- Semantic Colors -->
-    <color name="income_green">#66BB6A</color>
-    <color name="income_green_light">#1B2E1B</color>
-    <color name="expense_red">#EF5350</color>
-    <color name="expense_red_light">#2E1B1B</color>
-    <color name="balance_blue">#42A5F5</color>
-    <color name="balance_blue_light">#1B1B2E</color>
-    <color name="warning_orange">#FFA726</color>
-    <color name="error">#EF5350</color>
+    <color name="income_green">#34D399</color>
+    <color name="income_green_light">#0D3B2E</color>
+    <color name="expense_red">#F87171</color>
+    <color name="expense_red_light">#3B1515</color>
+    <color name="balance_blue">#60A5FA</color>
+    <color name="balance_blue_light">#152847</color>
+    <color name="warning_orange">#FBBF24</color>
+    <color name="warning_orange_light">#3B2E0A</color>
+    <color name="error">#F87171</color>
 
     <!-- Gradient Colors -->
-    <color name="gradient_start">#00897B</color>
-    <color name="gradient_end">#004D40</color>
-    <color name="gradient_income_start">#2E7D32</color>
-    <color name="gradient_income_end">#1B5E20</color>
-    <color name="gradient_expense_start">#C62828</color>
-    <color name="gradient_expense_end">#B71C1C</color>
-    <color name="gradient_balance_start">#1565C0</color>
-    <color name="gradient_balance_end">#0D47A1</color>
+    <color name="gradient_start">#10B981</color>
+    <color name="gradient_end">#1E3A8A</color>
+    <color name="gradient_income_start">#059669</color>
+    <color name="gradient_income_end">#047857</color>
+    <color name="gradient_expense_start">#DC2626</color>
+    <color name="gradient_expense_end">#B91C1C</color>
+    <color name="gradient_balance_start">#2563EB</color>
+    <color name="gradient_balance_end">#1D4ED8</color>
 
     <!-- Text Colors -->
-    <color name="text_primary">#E0E0E0</color>
-    <color name="text_secondary">#9E9E9E</color>
-    <color name="text_hint">#757575</color>
+    <color name="text_primary">#F1F5F9</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_hint">#64748B</color>
     <color name="text_on_dark">#FFFFFF</color>
-    <color name="text_on_dark_secondary">#B2DFDB</color>
+    <color name="text_on_dark_secondary">#CBD5E1</color>
 
     <!-- Divider -->
-    <color name="divider">#424242</color>
+    <color name="divider">#334155</color>
 
     <!-- Bottom Nav -->
-    <color name="nav_selected">#4DB6AC</color>
-    <color name="nav_unselected">#757575</color>
+    <color name="nav_selected">#34D399</color>
+    <color name="nav_unselected">#64748B</color>
+    <color name="nav_background">#1E293B</color>
+
+    <!-- Health Score -->
+    <color name="health_excellent">#34D399</color>
+    <color name="health_good">#60A5FA</color>
+    <color name="health_average">#FBBF24</color>
+    <color name="health_poor">#F87171</color>
+
+    <!-- Chip / Tab -->
+    <color name="chip_selected_bg">#34D399</color>
+    <color name="chip_unselected_bg">#334155</color>
+    <color name="chip_selected_text">#064E3B</color>
+    <color name="chip_unselected_text">#94A3B8</color>
+
+    <!-- Insight Cards -->
+    <color name="insight_warning_bg">#3B2E0A</color>
+    <color name="insight_tip_bg">#0D3B2E</color>
+    <color name="insight_alert_bg">#3B1515</color>
 </resources>

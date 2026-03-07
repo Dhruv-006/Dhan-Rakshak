@@ -13,12 +13,13 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText email, password;
-    MaterialButton loginButton;
+    Button loginButton;
     MaterialCheckBox rememberMe;
     TextView forgotPassword, signupText;
     DatabaseHelper dbHelper;
@@ -33,20 +34,18 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize sharedPreferences first
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
 
-        // 🟢 Check if user is already logged in
+        // Check if user is already logged in
         boolean isRemembered = sharedPreferences.getBoolean("remember", false);
         if (isRemembered) {
-            // If already logged in, go to main screen
-            Intent intent = new Intent(LoginActivity.this, AddIncomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();  // Finish LoginActivity so user can't go back to it
+            finish();
             return;
         }
 
-        // Only setContentView if not already logged in
         setContentView(R.layout.activity_login);
 
-        // 🔽 Initialize views
+        // Initialize views
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
@@ -75,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                     clearCredentials();
                 }
 
-                startActivity(new Intent(LoginActivity.this, AddIncomeActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
 
             } else {
@@ -92,10 +91,8 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
 
-
         loadSavedCredentials();
     }
-
 
     private void saveCredentials(String userEmail, String userPassword) {
         SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -2,23 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_income"
-        android:icon="@drawable/ic_income_nav"
-        android:title="Income" />
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_nav"
+        android:title="Home" />
 
     <item
-        android:id="@+id/nav_expense"
-        android:icon="@drawable/ic_expense_nav"
-        android:title="Expense" />
+        android:id="@+id/nav_transactions"
+        android:icon="@drawable/ic_transactions_nav"
+        android:title="Transactions" />
 
     <item
-        android:id="@+id/nav_statistics"
-        android:icon="@drawable/ic_statistics_nav"
-        android:title="Statistics" />
+        android:id="@+id/nav_goals"
+        android:icon="@drawable/ic_goals_nav"
+        android:title="Goals" />
 
     <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings_nav"
+        android:id="@+id/nav_insights"
+        android:icon="@drawable/ic_insights_nav"
+        android:title="Insights" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile_nav"
         android:title="Profile" />
 
 </menu>

@@ -2,21 +2,17 @@ package com.example.dhanrakshak;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
-
-import android.widget.TextView;
 
 public class SignupActivity extends AppCompatActivity {
 
-    TextInputEditText name, email, password, confirmPassword;
-    MaterialCheckBox termsCheckbox;
-    MaterialButton signupButton;
-    TextView loginText;
+    TextInputEditText signupUsername, signupEmail, signupPassword, signupConfirmPassword;
+    Button signupButton;
     DatabaseHelper dbHelper;
 
     @Override
@@ -24,44 +20,47 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Material Text Fields
-        name = findViewById(R.id.name);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        confirmPassword = findViewById(R.id.confirmPassword);
-
-        // Material Components
-        termsCheckbox = findViewById(R.id.termsCheckbox);
+        signupUsername = findViewById(R.id.signupUsername);
+        signupEmail = findViewById(R.id.signupEmail);
+        signupPassword = findViewById(R.id.signupPassword);
+        signupConfirmPassword = findViewById(R.id.signupConfirmPassword);
         signupButton = findViewById(R.id.signupButton);
-        loginText = findViewById(R.id.loginText);
-
         dbHelper = new DatabaseHelper(this);
 
         signupButton.setOnClickListener(v -> {
-            String userName = name.getText().toString().trim();
-            String userEmail = email.getText().toString().trim();
-            String userPassword = password.getText().toString().trim();
-            String userConfirmPassword = confirmPassword.getText().toString().trim();
+            String username = signupUsername.getText().toString().trim();
+            String email = signupEmail.getText().toString().trim();
+            String password = signupPassword.getText().toString().trim();
+            String confirmPassword = signupConfirmPassword.getText().toString().trim();
 
-            if (userName.isEmpty() || userEmail.isEmpty() || userPassword.isEmpty() || userConfirmPassword.isEmpty()) {
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            } else if (!userPassword.equals(userConfirmPassword)) {
+                return;
+            }
+
+            if (!password.equals(confirmPassword)) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            } else if (!termsCheckbox.isChecked()) {
-                Toast.makeText(this, "Please agree to the Terms & Conditions", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            boolean success = dbHelper.registerUser(email, password);
+            if (success) {
+                // Save username
+                getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+                        .edit()
+                        .putString("username", username)
+                        .apply();
+
+                Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                finish();
             } else {
-                boolean isRegistered = dbHelper.registerUser(userEmail, userPassword);
-                if (isRegistered) {
-                    Toast.makeText(this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    Toast.makeText(this, "User already exists or error occurred", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this, "Email already exists", Toast.LENGTH_SHORT).show();
             }
         });
 
-        loginText.setOnClickListener(v -> {
+        // Login link
+        findViewById(R.id.loginText).setOnClickListener(v -> {
             startActivity(new Intent(SignupActivity.this, LoginActivity.class));
             finish();
         });
