@@ -2,10 +2,60 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#4CAF50</color>
-    <color name="primary_container">#A5D6A7</color>
-    <color name="secondary">#FF9800</color>
-    <color name="background">#FAFCFF</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="error">#F44336</color>
+
+    <!-- Primary Palette (Teal - lighter for dark mode readability) -->
+    <color name="primary">#4DB6AC</color>
+    <color name="primary_dark">#00897B</color>
+    <color name="primary_light">#1A3A36</color>
+    <color name="primary_container">#1A3A36</color>
+    <color name="on_primary">#003731</color>
+    <color name="on_primary_container">#B2DFDB</color>
+
+    <!-- Secondary Palette -->
+    <color name="secondary">#FFD54F</color>
+    <color name="secondary_container">#3E2723</color>
+    <color name="on_secondary">#3E2723</color>
+
+    <!-- Background & Surface -->
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="surface_variant">#2C2C2C</color>
+    <color name="on_surface">#E0E0E0</color>
+    <color name="on_surface_variant">#BDBDBD</color>
+    <color name="outline">#424242</color>
+    <color name="card_background">#1E1E1E</color>
+
+    <!-- Semantic Colors -->
+    <color name="income_green">#66BB6A</color>
+    <color name="income_green_light">#1B2E1B</color>
+    <color name="expense_red">#EF5350</color>
+    <color name="expense_red_light">#2E1B1B</color>
+    <color name="balance_blue">#42A5F5</color>
+    <color name="balance_blue_light">#1B1B2E</color>
+    <color name="warning_orange">#FFA726</color>
+    <color name="error">#EF5350</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#00897B</color>
+    <color name="gradient_end">#004D40</color>
+    <color name="gradient_income_start">#2E7D32</color>
+    <color name="gradient_income_end">#1B5E20</color>
+    <color name="gradient_expense_start">#C62828</color>
+    <color name="gradient_expense_end">#B71C1C</color>
+    <color name="gradient_balance_start">#1565C0</color>
+    <color name="gradient_balance_end">#0D47A1</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#E0E0E0</color>
+    <color name="text_secondary">#9E9E9E</color>
+    <color name="text_hint">#757575</color>
+    <color name="text_on_dark">#FFFFFF</color>
+    <color name="text_on_dark_secondary">#B2DFDB</color>
+
+    <!-- Divider -->
+    <color name="divider">#424242</color>
+
+    <!-- Bottom Nav -->
+    <color name="nav_selected">#4DB6AC</color>
+    <color name="nav_unselected">#757575</color>
 </resources>

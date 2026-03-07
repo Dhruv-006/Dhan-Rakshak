@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurfaceVariant">
+    android:background="@color/background">
 
-    <!-- App Bar Toolbar -->
+    <!-- Gradient Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:elevation="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/gradient_header"
             app:title="Add Expense"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/text_on_dark"
+            app:titleTextAppearance="@style/SectionTitle" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
@@ -28,43 +30,86 @@
         android:layout_above="@+id/bottomNavigationView"
         android:layout_below="@+id/appBarLayout"
         android:clipToPadding="false"
-        android:padding="16dp">
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Main Card Container -->
+            <!-- Amount Display Header -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_expense"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EXPENSE AMOUNT"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:alpha="0.8"
+                        android:letterSpacing="0.15" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹ 0.00"
+                        android:textColor="@color/text_on_dark"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Expense Details Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Expense Details"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
+                        android:textColor="@color/expense_red"
+                        android:textSize="16sp"
                         android:textStyle="bold"
+                        android:letterSpacing="0.02"
                         android:layout_marginBottom="16dp" />
 
                     <!-- Expense Type Field -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
+                        android:layout_marginBottom="14dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -80,10 +125,15 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        app:prefixText="$"
+                        android:layout_marginBottom="14dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
+                        app:prefixText="₹"
+                        app:prefixTextColor="@color/primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -99,12 +149,15 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
                         app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_calendar"
-                        app:endIconTint="?attr/colorPrimary"
+                        app:endIconTint="@color/primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -124,22 +177,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment Method"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
                         android:textStyle="bold"
+                        android:letterSpacing="0.02"
                         android:layout_marginBottom="16dp" />
 
                     <RadioGroup
@@ -151,49 +206,70 @@
                         <RadioButton
                             android:id="@+id/cashRadio"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cash"
-                            android:buttonTint="?attr/colorPrimary"
+                            android:layout_height="44dp"
+                            android:text="  Cash"
+                            android:buttonTint="@color/primary"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
                             android:layout_weight="1" />
 
                         <RadioButton
                             android:id="@+id/cardRadio"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Card"
-                            android:buttonTint="?attr/colorPrimary"
+                            android:layout_height="44dp"
+                            android:text="  Card"
+                            android:buttonTint="@color/primary"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
                             android:layout_weight="1" />
 
                         <RadioButton
                             android:id="@+id/otherPaymentRadio"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Other"
-                            android:buttonTint="?attr/colorPrimary"
+                            android:layout_height="44dp"
+                            android:text="  Other"
+                            android:buttonTint="@color/primary"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
                             android:layout_weight="1" />
                     </RadioGroup>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Notes Field -->
+            <!-- Notes Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Additional Notes"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02"
+                        android:layout_marginBottom="12dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -215,9 +291,10 @@
                 android:layout_height="56dp"
                 android:text="SAVE EXPENSE"
                 android:textSize="16sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
                 app:cornerRadius="28dp"
-                app:backgroundTint="?attr/colorPrimary"
-                android:letterSpacing="0.05"
+                app:backgroundTint="@color/expense_red"
                 android:layout_marginBottom="16dp" />
         </LinearLayout>
     </ScrollView>
@@ -228,7 +305,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
+        android:background="@color/surface"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:elevation="8dp"

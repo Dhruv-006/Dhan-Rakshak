@@ -4,22 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurfaceVariant">
+    android:background="@color/background">
 
-    <!-- App Bar Toolbar -->
+    <!-- Gradient Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:elevation="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/gradient_header"
             app:title="Statistics"
-            app:titleTextColor="@android:color/white">
+            app:titleTextColor="@color/text_on_dark"
+            app:titleTextAppearance="@style/SectionTitle">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/calendarIcon"
@@ -28,7 +30,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
                 app:srcCompat="@drawable/ic_calendar"
-                android:tint="@android:color/white" />
+                app:tint="@android:color/white" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,25 +45,153 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
-            <!-- Time Period Filter Card -->
+            <!-- Summary Dashboard - Gradient Cards -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_balance"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL BALANCE"
+                        android:textColor="#FFFFFF"
+                        android:alpha="0.85"
+                        android:textSize="13sp"
+                        android:letterSpacing="0.15" />
+
+                    <TextView
+                        android:id="@+id/balanceText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹0"
+                        android:textColor="@color/text_on_dark"
+                        android:textSize="34sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Income & Expense Cards Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Income Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_income"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="INCOME"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.85"
+                            android:textSize="11sp"
+                            android:letterSpacing="0.15" />
+
+                        <TextView
+                            android:id="@+id/totalIncomeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₹0"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_on_dark"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Expense Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@android:color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_expense"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="EXPENSE"
+                            android:textColor="#FFFFFF"
+                            android:alpha="0.85"
+                            android:textSize="11sp"
+                            android:letterSpacing="0.15" />
+
+                        <TextView
+                            android:id="@+id/totalExpenseText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₹0"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_on_dark"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Time Period Filter -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/filterTabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     app:tabMode="fixed"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="?attr/colorPrimary"
-                    app:tabSelectedTextColor="?attr/colorPrimary"
-                    app:tabTextColor="#757575">
+                    app:tabIndicatorColor="@color/primary"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabSelectedTextColor="@color/primary"
+                    app:tabTextColor="@color/text_hint"
+                    app:tabRippleColor="@color/primary_light">
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
@@ -80,171 +210,35 @@
                 </com.google.android.material.tabs.TabLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Summary Dashboard Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Summary"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="16dp" />
-
-                    <!-- Balance Card -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginBottom="16dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="2dp"
-                        app:cardBackgroundColor="#E3F2FD">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="BALANCE"
-                                android:textSize="14sp"
-                                android:textColor="#757575" />
-
-                            <TextView
-                                android:id="@+id/balanceText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="28sp"
-                                android:textStyle="bold"
-                                android:textColor="?attr/colorPrimary" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Income Expense Cards -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <!-- Income Card -->
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="80dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="2dp"
-                            app:cardBackgroundColor="#E8F5E9">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="INCOME"
-                                    android:textSize="12sp"
-                                    android:textColor="#757575" />
-
-                                <TextView
-                                    android:id="@+id/totalIncomeText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@android:color/holo_green_dark" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- Expense Card -->
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="80dp"
-                            android:layout_weight="1"
-                            android:layout_marginStart="8dp"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="2dp"
-                            app:cardBackgroundColor="#FFEBEE">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="EXPENSE"
-                                    android:textSize="12sp"
-                                    android:textColor="#757575" />
-
-                                <TextView
-                                    android:id="@+id/totalExpenseText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#F44336" />
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
             <!-- Chart Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Income vs Expense"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
+                        android:letterSpacing="0.02"
+                        android:layout_marginBottom="12dp" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="16dp" />
+                        android:layout_height="220dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -253,19 +247,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
@@ -273,17 +269,19 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Recent Transactions"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.02" />
 
                         <TextView
                             android:id="@+id/viewAllText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="View All"
-                            android:textColor="?attr/colorPrimary"
-                            android:textSize="14sp" />
+                            android:textColor="@color/primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -302,7 +300,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
+        android:background="@color/surface"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:elevation="8dp"

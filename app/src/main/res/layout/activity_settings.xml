@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurfaceVariant">
+    android:background="@color/background">
 
-    <!-- App Bar Toolbar -->
+    <!-- Gradient Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:elevation="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/gradient_header"
             app:title="Profile"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/text_on_dark"
+            app:titleTextAppearance="@style/SectionTitle" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -32,31 +34,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
-            <!-- Profile Card -->
+            <!-- Profile Header Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_header"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
-                    <RelativeLayout
+                    <!-- User initial circle + info -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Avatar circle -->
+                        <FrameLayout
+                            android:layout_width="56dp"
+                            android:layout_height="56dp">
+
+                            <View
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="@drawable/bg_icon_circle" />
+
+                            <TextView
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:gravity="center"
+                                android:text="U"
+                                android:textColor="@color/primary"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                        </FrameLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:orientation="vertical">
 
@@ -65,8 +91,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Welcome, User!"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="24sp"
+                                android:textColor="@color/text_on_dark"
+                                android:textSize="20sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -74,23 +100,49 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="user@example.com"
-                                android:textColor="#757575"
-                                android:textSize="16sp" />
+                                android:textColor="@color/text_on_dark_secondary"
+                                android:textSize="14sp"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
-                    </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
+            <!-- Edit Profile Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -105,11 +157,13 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSaveUsername"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:text="UPDATE PROFILE"
                         android:textSize="14sp"
-                        app:cornerRadius="8dp"
-                        app:backgroundTint="?attr/colorPrimary" />
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"
+                        app:cornerRadius="24dp"
+                        app:backgroundTint="@color/primary" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -118,40 +172,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Data Management"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
+                        android:textColor="@color/warning_orange"
+                        android:textSize="16sp"
                         android:textStyle="bold"
+                        android:letterSpacing="0.02"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Manage your financial data stored in Dhan Rakshak. Clearing data will remove all your income and expense records."
-                        android:textColor="#333333"
-                        android:textSize="16sp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:lineSpacingMultiplier="1.3"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnClearData"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:text="CLEAR ALL FINANCIAL DATA"
                         android:textSize="14sp"
-                        app:cornerRadius="8dp"
-                        app:backgroundTint="#FF9800"
+                        android:textStyle="bold"
+                        app:cornerRadius="24dp"
+                        app:backgroundTint="@color/warning_orange"
                         app:icon="@drawable/ic_delete"
                         app:iconGravity="textStart"
                         app:iconTint="@android:color/white" />
@@ -163,32 +221,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/card_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="About Dhan Rakshak"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02"
+                        android:layout_marginBottom="12dp" />
 
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Dhan Rakshak is your personal finance guardian, designed to help you track your income and expenses with ease and efficiency. Whether you're a student, working professional, or managing a household, Dhan Rakshak empowers you to take control of your financial life."
-                        android:textColor="#333333"
-                        android:textSize="16sp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:lineSpacingMultiplier="1.4"
                         android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAbout"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:text="LEARN MORE"
                         android:textSize="14sp"
-                        app:cornerRadius="8dp"
-                        app:backgroundTint="?attr/colorPrimary" />
+                        android:textColor="@color/primary"
+                        app:cornerRadius="24dp"
+                        app:strokeColor="@color/primary"
+                        app:strokeWidth="1.5dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -196,11 +269,13 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="52dp"
                 android:text="LOGOUT"
-                android:textSize="14sp"
-                app:cornerRadius="8dp"
-                app:backgroundTint="#F44336"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                app:cornerRadius="26dp"
+                app:backgroundTint="@color/expense_red"
                 android:layout_marginBottom="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -211,7 +286,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
+        android:background="@color/surface"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
         app:elevation="8dp"

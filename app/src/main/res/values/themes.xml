@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.DhanRakshak" parent="Theme.Material3.Light.NoActionBar">
-        <item name="colorPrimary">#4CAF50</item> <!-- Green for finance -->
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorPrimaryContainer">#A5D6A7</item>
-        <item name="colorOnPrimaryContainer">#1B5E20</item>
-        <item name="colorSecondary">#FF9800</item> <!-- Orange accent -->
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="android:windowBackground">#FAFCFF</item>
-        <item name="android:statusBarColor">#4CAF50</item>
-        <item name="colorSurface">#FFFFFF</item>
+        <!-- Primary -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
 
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_container</item>
+
+        <!-- Surface & Background -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        <item name="colorOutline">@color/outline</item>
+
+        <!-- System Bars -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error</item>
+
+        <!-- Button style -->
         <item name="buttonStyle">@style/FinancialButton</item>
-
     </style>
+
     <style name="Theme.DhanRakshak" parent="Base.Theme.DhanRakshak" />
 </resources>

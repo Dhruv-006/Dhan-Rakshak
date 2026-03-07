@@ -1,9 +1,13 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="360dp"
-    android:height="120dp"
+    android:height="200dp"
     android:viewportWidth="360"
-    android:viewportHeight="120">
+    android:viewportHeight="200">
     <path
-        android:fillColor="#6200EE"
-        android:pathData="M0,0 L0,60 Q90,120 180,60 T360,60 L360,0 Z" />
+        android:fillColor="@color/gradient_end"
+        android:pathData="M0,0 L0,140 Q90,200 180,140 T360,140 L360,0 Z" />
+    <path
+        android:fillColor="@color/gradient_start"
+        android:fillAlpha="0.6"
+        android:pathData="M0,0 L0,120 Q120,180 240,120 T360,120 L360,0 Z" />
 </vector>
