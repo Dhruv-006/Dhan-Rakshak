@@ -26,6 +26,7 @@ public class GoalsFragment extends Fragment {
     private GoalAdapter adapter;
     private List<GoalModel> goalList;
     private DatabaseHelper db;
+    private String userEmail;
 
     @Nullable
     @Override
@@ -34,6 +35,9 @@ public class GoalsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_goals, container, false);
 
         db = new DatabaseHelper(requireContext());
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LoginPrefs",
+                requireContext().MODE_PRIVATE);
+        userEmail = prefs.getString("email", "unknown");
 
         recyclerView = view.findViewById(R.id.goalsRecyclerView);
         goalList = new ArrayList<>();
@@ -58,7 +62,7 @@ public class GoalsFragment extends Fragment {
 
     private void loadGoals() {
         goalList.clear();
-        goalList.addAll(db.getAllGoals());
+        goalList.addAll(db.getAllGoals(userEmail));
         adapter.notifyDataSetChanged();
     }
 
@@ -93,7 +97,7 @@ public class GoalsFragment extends Fragment {
             }
 
             double target = Double.parseDouble(targetStr);
-            boolean success = db.insertGoal(name, target);
+            boolean success = db.insertGoal(userEmail, name, target);
             if (success) {
                 Toast.makeText(requireContext(), "Goal added!", Toast.LENGTH_SHORT).show();
                 loadGoals();

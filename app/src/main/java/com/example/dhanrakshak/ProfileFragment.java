@@ -24,6 +24,7 @@ public class ProfileFragment extends Fragment {
     private SwitchCompat switchDarkMode;
     private SharedPreferences sharedPreferences;
     private DatabaseHelper db;
+    private String userEmail;
 
     @Nullable
     @Override
@@ -33,6 +34,7 @@ public class ProfileFragment extends Fragment {
 
         db = new DatabaseHelper(requireContext());
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", requireContext().MODE_PRIVATE);
+        userEmail = sharedPreferences.getString("email", "unknown");
 
         // Init views
         tvProfileName = view.findViewById(R.id.tvProfileName);
@@ -85,7 +87,7 @@ public class ProfileFragment extends Fragment {
                     .setTitle("Clear All Data")
                     .setMessage("Are you sure? This will delete all your financial data.")
                     .setPositiveButton("Delete", (dialog, which) -> {
-                        db.clearAllFinancialData();
+                        db.clearAllFinancialData(userEmail);
                         Toast.makeText(requireContext(), "All data cleared!", Toast.LENGTH_SHORT).show();
                         loadFinancialScore();
                     })
@@ -112,8 +114,8 @@ public class ProfileFragment extends Fragment {
         cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
         String startDate = sdf.format(cal.getTime());
 
-        double income = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_INCOME, startDate, endDate);
-        double expense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
+        double income = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_INCOME, startDate, endDate);
+        double expense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
 
         int score;
         if (income == 0) {

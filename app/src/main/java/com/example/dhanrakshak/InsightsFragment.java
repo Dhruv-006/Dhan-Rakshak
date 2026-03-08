@@ -31,6 +31,7 @@ public class InsightsFragment extends Fragment {
     private BarChart trendBarChart;
     private TextView tvInsight1, tvPrediction, tvSavingsTip;
     private DatabaseHelper db;
+    private String userEmail;
 
     @Nullable
     @Override
@@ -39,6 +40,9 @@ public class InsightsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_insights, container, false);
 
         db = new DatabaseHelper(requireContext());
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LoginPrefs",
+                requireContext().MODE_PRIVATE);
+        userEmail = prefs.getString("email", "unknown");
 
         pieChart = view.findViewById(R.id.pieChart);
         trendBarChart = view.findViewById(R.id.trendBarChart);
@@ -60,8 +64,10 @@ public class InsightsFragment extends Fragment {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         String startDate = sdf.format(cal.getTime());
 
-        double totalIncome = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_INCOME, startDate, endDate);
-        double totalExpense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
+        double totalIncome = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_INCOME, startDate,
+                endDate);
+        double totalExpense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, startDate,
+                endDate);
 
         List<PieEntry> entries = new ArrayList<>();
         if (totalIncome > 0)
@@ -113,7 +119,7 @@ public class InsightsFragment extends Fragment {
             c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
             String end = sdf.format(c.getTime());
 
-            double expense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, start, end);
+            double expense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, start, end);
             entries.add(new BarEntry(5 - i, (float) expense));
             labels[5 - i] = monthFormat.format(c.getTime());
         }
@@ -160,8 +166,10 @@ public class InsightsFragment extends Fragment {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         String startDate = sdf.format(cal.getTime());
 
-        double monthlyExpense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
-        double monthlyIncome = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_INCOME, startDate, endDate);
+        double monthlyExpense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, startDate,
+                endDate);
+        double monthlyIncome = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_INCOME, startDate,
+                endDate);
 
         // Dynamic insights
         if (monthlyExpense > 0) {

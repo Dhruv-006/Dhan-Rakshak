@@ -30,6 +30,7 @@ public class TransactionsFragment extends Fragment {
     private EditText searchEditText;
     private TabLayout tabLayout;
     private DatabaseHelper db;
+    private String userEmail;
 
     @Nullable
     @Override
@@ -38,6 +39,9 @@ public class TransactionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
         db = new DatabaseHelper(requireContext());
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LoginPrefs",
+                requireContext().MODE_PRIVATE);
+        userEmail = prefs.getString("email", "unknown");
 
         recyclerView = view.findViewById(R.id.transactionsRecyclerView);
         searchEditText = view.findViewById(R.id.searchEditText);
@@ -105,7 +109,7 @@ public class TransactionsFragment extends Fragment {
 
     private void loadTransactions(String filterType) {
         allTransactions.clear();
-        allTransactions.addAll(db.getAllTransactions(filterType));
+        allTransactions.addAll(db.getAllTransactions(userEmail, filterType));
         filteredTransactions.clear();
         filteredTransactions.addAll(allTransactions);
         adapter.notifyDataSetChanged();

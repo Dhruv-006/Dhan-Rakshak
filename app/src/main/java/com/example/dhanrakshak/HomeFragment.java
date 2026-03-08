@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
     private BarChart barChart;
     private RecyclerView recentTransactionsRecyclerView;
     private DatabaseHelper db;
+    private String userEmail;
 
     @Nullable
     @Override
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
         // Load username
         SharedPreferences prefs = requireContext().getSharedPreferences("LoginPrefs", requireContext().MODE_PRIVATE);
         String username = prefs.getString("username", "Dhruv");
+        userEmail = prefs.getString("email", "unknown");
         tvUserName.setText(username);
 
         // Load data
@@ -117,8 +119,10 @@ public class HomeFragment extends Fragment {
         cal.set(Calendar.DAY_OF_MONTH, 1);
         String startDate = sdf.format(cal.getTime());
 
-        double totalIncome = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_INCOME, startDate, endDate);
-        double totalExpense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, startDate, endDate);
+        double totalIncome = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_INCOME, startDate,
+                endDate);
+        double totalExpense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, startDate,
+                endDate);
         double balance = totalIncome - totalExpense;
 
         tvTotalBalance.setText(String.format("₹%.2f", balance));
@@ -172,7 +176,7 @@ public class HomeFragment extends Fragment {
             c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
             String end = sdf.format(c.getTime());
 
-            double expense = db.getTotalAmountWithDateFilter(DatabaseHelper.TABLE_EXPENSE, start, end);
+            double expense = db.getTotalAmountWithDateFilter(userEmail, DatabaseHelper.TABLE_EXPENSE, start, end);
             entries.add(new BarEntry(5 - i, (float) expense));
             labels[5 - i] = monthFormat.format(c.getTime());
         }
@@ -215,7 +219,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadRecentTransactions() {
-        List<TransactionModel> transactions = db.getRecentTransactions(5);
+        List<TransactionModel> transactions = db.getRecentTransactions(userEmail, 5);
         TransactionAdapter adapter = new TransactionAdapter(requireContext(), transactions);
         recentTransactionsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recentTransactionsRecyclerView.setAdapter(adapter);

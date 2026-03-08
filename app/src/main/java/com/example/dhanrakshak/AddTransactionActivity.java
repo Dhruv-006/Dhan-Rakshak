@@ -26,10 +26,13 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView tvPaymentLabel;
     private DatabaseHelper dbHelper;
     private boolean isExpense = true;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        android.content.SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        userEmail = prefs.getString("email", "unknown");
         setContentView(R.layout.activity_add_transaction);
 
         editTitle = findViewById(R.id.editTitle);
@@ -102,9 +105,9 @@ public class AddTransactionActivity extends AppCompatActivity {
                     RadioButton selectedRadio = findViewById(selectedPaymentId);
                     paymentMethod = selectedRadio.getText().toString();
                 }
-                success = dbHelper.insertExpense(title, amount, date, paymentMethod, notes);
+                success = dbHelper.insertExpense(userEmail, title, amount, date, paymentMethod, notes);
             } else {
-                success = dbHelper.insertIncome(title, amount, date, notes);
+                success = dbHelper.insertIncome(userEmail, title, amount, date, notes);
             }
 
             if (success) {

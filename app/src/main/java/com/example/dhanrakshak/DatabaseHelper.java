@@ -18,10 +18,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GOALS = "goals";
 
     public static final String DATABASE_NAME = "DhanRakshak.db";
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
 
     // Table and Column Names
     public static final String TABLE_USERS = "users";
+    public static final String COLUMN_USER_EMAIL = "user_email";
 
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
@@ -61,7 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_CATEGORY + " TEXT, " +
                 COLUMN_NOTES + " TEXT, " +
                 COLUMN_TYPE + " TEXT, " +
-                COLUMN_TIMESTAMP + " TEXT DEFAULT '0')");
+                COLUMN_TIMESTAMP + " TEXT DEFAULT '0', " +
+                COLUMN_USER_EMAIL + " TEXT)");
 
         // Expense Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE + " (" +
@@ -73,7 +75,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PAYMENT_METHOD + " TEXT, " +
                 COLUMN_NOTES + " TEXT, " +
                 COLUMN_TYPE + " TEXT, " +
-                COLUMN_TIMESTAMP + " TEXT DEFAULT '0')");
+                COLUMN_TIMESTAMP + " TEXT DEFAULT '0', " +
+                COLUMN_USER_EMAIL + " TEXT)");
 
         // Goals Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_GOALS + " (" +
@@ -81,7 +84,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_GOAL_NAME + " TEXT, " +
                 COLUMN_TARGET_AMOUNT + " REAL, " +
                 COLUMN_SAVED_AMOUNT + " REAL DEFAULT 0, " +
-                COLUMN_CREATED_DATE + " TEXT)");
+                COLUMN_CREATED_DATE + " TEXT, " +
+                COLUMN_USER_EMAIL + " TEXT)");
     }
 
     @Override
@@ -125,6 +129,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + TABLE_EXPENSE + " ADD COLUMN " + COLUMN_TIMESTAMP + " TEXT DEFAULT '0'");
             }
         }
+        if (oldVersion < 7) {
+            if (!columnExists(db, TABLE_INCOME, COLUMN_USER_EMAIL)) {
+                db.execSQL(
+                        "ALTER TABLE " + TABLE_INCOME + " ADD COLUMN " + COLUMN_USER_EMAIL + " TEXT DEFAULT 'unknown'");
+            }
+            if (!columnExists(db, TABLE_EXPENSE, COLUMN_USER_EMAIL)) {
+                db.execSQL("ALTER TABLE " + TABLE_EXPENSE + " ADD COLUMN " + COLUMN_USER_EMAIL
+                        + " TEXT DEFAULT 'unknown'");
+            }
+            if (!columnExists(db, TABLE_GOALS, COLUMN_USER_EMAIL)) {
+                db.execSQL(
+                        "ALTER TABLE " + TABLE_GOALS + " ADD COLUMN " + COLUMN_USER_EMAIL + " TEXT DEFAULT 'unknown'");
+            }
+        }
     }
 
     @SuppressLint("Range")
@@ -160,7 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertIncome(String title, String amount, String date, String notes) {
+    public boolean insertIncome(String userEmail, String title, String amount, String date, String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
@@ -169,11 +187,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_NOTES, notes);
         values.put(COLUMN_TYPE, "Income");
         values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+        values.put(COLUMN_USER_EMAIL, userEmail);
         long result = db.insert(TABLE_INCOME, null, values);
         return result != -1;
     }
 
-    public boolean insertExpense(String title, String amount, String date, String paymentMethod, String notes) {
+    public boolean insertExpense(String userEmail, String title, String amount, String date, String paymentMethod,
+            String notes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
@@ -183,11 +203,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PAYMENT_METHOD, paymentMethod);
         values.put(COLUMN_TYPE, "Expense");
         values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+        values.put(COLUMN_USER_EMAIL, userEmail);
         return db.insert(TABLE_EXPENSE, null, values) != -1;
     }
 
     // Get Total by Date Range
-    public double getTotalAmountWithDateFilter(String tableName, String startDate, String endDate) {
+    public double getTotalAmountWithDateFilter(String userEmail, String tableName, String startDate, String endDate) {
         double total = 0;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -195,10 +216,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (startDate != null && endDate != null) {
             cursor = db.rawQuery(
                     "SELECT " + COLUMN_AMOUNT + " FROM " + tableName +
-                            " WHERE " + COLUMN_DATE + " BETWEEN ? AND ?",
-                    new String[] { startDate, endDate });
+                            " WHERE " + COLUMN_USER_EMAIL + "=? AND " + COLUMN_DATE + " BETWEEN ? AND ?",
+                    new String[] { userEmail, startDate, endDate });
         } else {
-            cursor = db.rawQuery("SELECT " + COLUMN_AMOUNT + " FROM " + tableName, null);
+            cursor = db.rawQuery(
+                    "SELECT " + COLUMN_AMOUNT + " FROM " + tableName + " WHERE " + COLUMN_USER_EMAIL + "=?",
+                    new String[] { userEmail });
         }
 
         if (cursor.moveToFirst()) {
@@ -216,37 +239,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Get Transactions by Date Range
-    public Cursor getTransactions(String tableName, String startDate, String endDate) {
+    public Cursor getTransactions(String userEmail, String tableName, String startDate, String endDate) {
         SQLiteDatabase db = this.getReadableDatabase();
         if (startDate != null && endDate != null) {
             return db.rawQuery("SELECT * FROM " + tableName +
-                    " WHERE " + COLUMN_DATE + " BETWEEN ? AND ?", new String[] { startDate, endDate });
+                    " WHERE " + COLUMN_USER_EMAIL + "=? AND " + COLUMN_DATE + " BETWEEN ? AND ?",
+                    new String[] { userEmail, startDate, endDate });
         } else {
-            return db.rawQuery("SELECT * FROM " + tableName, null);
+            return db.rawQuery("SELECT * FROM " + tableName + " WHERE " + COLUMN_USER_EMAIL + "=?",
+                    new String[] { userEmail });
         }
     }
 
     // Get all transactions (for TransactionsFragment)
     @SuppressLint("Range")
-    public List<TransactionModel> getAllTransactions(String filterType) {
+    public List<TransactionModel> getAllTransactions(String userEmail, String filterType) {
         List<TransactionModel> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         String incomeQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_AMOUNT + ", " + COLUMN_DATE
-                + ", " + COLUMN_TIMESTAMP + ", 'Income' as " + COLUMN_TYPE + " FROM " + TABLE_INCOME;
+                + ", " + COLUMN_TIMESTAMP + ", 'Income' as " + COLUMN_TYPE + " FROM " + TABLE_INCOME + " WHERE "
+                + COLUMN_USER_EMAIL + "=?";
         String expenseQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_AMOUNT + ", " + COLUMN_DATE
-                + ", " + COLUMN_TIMESTAMP + ", 'Expense' as " + COLUMN_TYPE + " FROM " + TABLE_EXPENSE;
+                + ", " + COLUMN_TIMESTAMP + ", 'Expense' as " + COLUMN_TYPE + " FROM " + TABLE_EXPENSE + " WHERE "
+                + COLUMN_USER_EMAIL + "=?";
         String orderBy = " ORDER BY " + COLUMN_DATE + " DESC, " + COLUMN_TIMESTAMP + " DESC";
 
         Cursor cursor = null;
 
         if ("All".equals(filterType) || filterType == null) {
             String query = incomeQuery + " UNION ALL " + expenseQuery + orderBy;
-            cursor = db.rawQuery(query, null);
+            cursor = db.rawQuery(query, new String[] { userEmail, userEmail });
         } else if ("Income".equals(filterType)) {
-            cursor = db.rawQuery(incomeQuery + orderBy, null);
+            cursor = db.rawQuery(incomeQuery + orderBy, new String[] { userEmail });
         } else if ("Expense".equals(filterType)) {
-            cursor = db.rawQuery(expenseQuery + orderBy, null);
+            cursor = db.rawQuery(expenseQuery + orderBy, new String[] { userEmail });
         }
 
         if (cursor != null) {
@@ -266,8 +293,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Get recent transactions (for HomeFragment)
-    public List<TransactionModel> getRecentTransactions(int limit) {
-        List<TransactionModel> all = getAllTransactions("All");
+    public List<TransactionModel> getRecentTransactions(String userEmail, int limit) {
+        List<TransactionModel> all = getAllTransactions(userEmail, "All");
         if (all.size() > limit) {
             return all.subList(0, limit);
         }
@@ -275,12 +302,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Goals CRUD
-    public boolean insertGoal(String name, double targetAmount) {
+    public boolean insertGoal(String userEmail, String name, double targetAmount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_GOAL_NAME, name);
         values.put(COLUMN_TARGET_AMOUNT, targetAmount);
         values.put(COLUMN_SAVED_AMOUNT, 0);
+        values.put(COLUMN_USER_EMAIL, userEmail);
 
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
         values.put(COLUMN_CREATED_DATE, sdf.format(new java.util.Date()));
@@ -289,10 +317,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public List<GoalModel> getAllGoals() {
+    public List<GoalModel> getAllGoals(String userEmail) {
         List<GoalModel> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_GOALS + " ORDER BY " + COLUMN_ID + " DESC", null);
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_GOALS + " WHERE " + COLUMN_USER_EMAIL + "=? ORDER BY " + COLUMN_ID + " DESC",
+                new String[] { userEmail });
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
@@ -313,9 +343,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_GOALS, values, COLUMN_ID + "=?", new String[] { String.valueOf(goalId) }) > 0;
     }
 
-    public void clearAllFinancialData() {
+    public void clearAllFinancialData(String userEmail) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INCOME, null, null);
-        db.delete(TABLE_EXPENSE, null, null);
+        db.delete(TABLE_INCOME, COLUMN_USER_EMAIL + "=?", new String[] { userEmail });
+        db.delete(TABLE_EXPENSE, COLUMN_USER_EMAIL + "=?", new String[] { userEmail });
+        db.delete(TABLE_GOALS, COLUMN_USER_EMAIL + "=?", new String[] { userEmail });
     }
 }
