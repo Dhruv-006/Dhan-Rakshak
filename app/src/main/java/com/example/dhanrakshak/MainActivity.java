@@ -12,6 +12,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Apply saved theme preference on startup
+        android.content.SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        int savedTheme = prefs.getInt("theme_mode", androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(savedTheme);
+
         setContentView(R.layout.activity_main);
 
         bottomNav = findViewById(R.id.bottomNavigationView);

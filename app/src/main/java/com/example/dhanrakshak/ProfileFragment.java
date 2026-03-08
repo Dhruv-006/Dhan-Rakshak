@@ -20,8 +20,7 @@ import androidx.fragment.app.Fragment;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView tvProfileName, tvProfileEmail, tvAvatarLetter, tvProfileScore, tvScoreStatus;
-    private SwitchCompat switchDarkMode;
+    private TextView tvProfileName, tvProfileEmail, tvAvatarLetter, tvProfileScore, tvScoreStatus, tvDarkModeValue;
     private SharedPreferences sharedPreferences;
     private DatabaseHelper db;
     private String userEmail;
@@ -42,7 +41,6 @@ public class ProfileFragment extends Fragment {
         tvAvatarLetter = view.findViewById(R.id.tvAvatarLetter);
         tvProfileScore = view.findViewById(R.id.tvProfileScore);
         tvScoreStatus = view.findViewById(R.id.tvScoreStatus);
-        switchDarkMode = view.findViewById(R.id.switchDarkMode);
 
         // Load user info
         String username = sharedPreferences.getString("username", "Dhruv");
@@ -54,16 +52,13 @@ public class ProfileFragment extends Fragment {
         // Calculate score
         loadFinancialScore();
 
-        // Dark mode toggle
-        boolean isDarkMode = (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES);
-        switchDarkMode.setChecked(isDarkMode);
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        });
+        tvDarkModeValue = view.findViewById(R.id.tvDarkModeValue);
+
+        // Dark mode setup
+        int currentTheme = sharedPreferences.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_NO); // Default to Light
+        updateDarkModeText(currentTheme);
+
+        view.findViewById(R.id.btnDarkMode).setOnClickListener(v -> showThemeSelectionDialog());
 
         // Edit Username
         view.findViewById(R.id.btnEditUsername).setOnClickListener(v -> showEditUsernameDialog());
@@ -78,7 +73,7 @@ public class ProfileFragment extends Fragment {
 
         // About
         view.findViewById(R.id.btnAbout).setOnClickListener(v -> Toast
-                .makeText(requireContext(), "Dhan Rakshak\nVersion 1.0\nMade with ❤️ by Dhruv", Toast.LENGTH_LONG)
+                .makeText(requireContext(), "Dhan Rakshak\nVersion 2.0\nMade with ❤️ by Dhruv", Toast.LENGTH_LONG)
                 .show());
 
         // Clear Data
@@ -172,5 +167,50 @@ public class ProfileFragment extends Fragment {
         });
         builder.setNegativeButton("Cancel", null);
         builder.show();
+    }
+
+    private void showThemeSelectionDialog() {
+        String[] options = { "System Default", "Light", "Dark" };
+        int currentTheme = sharedPreferences.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_NO);
+
+        int checkedItem = 1; // Default Light
+        if (currentTheme == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+            checkedItem = 0;
+        } else if (currentTheme == AppCompatDelegate.MODE_NIGHT_YES) {
+            checkedItem = 2;
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Select Theme")
+                .setSingleChoiceItems(options, checkedItem, (dialog, which) -> {
+                    int selectedThemeMode = AppCompatDelegate.MODE_NIGHT_NO; // Light
+                    if (which == 0) {
+                        selectedThemeMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM; // System
+                    } else if (which == 2) {
+                        selectedThemeMode = AppCompatDelegate.MODE_NIGHT_YES; // Dark
+                    }
+
+                    // Save to SharedPreferences
+                    sharedPreferences.edit().putInt("theme_mode", selectedThemeMode).apply();
+
+                    // Apply theme
+                    AppCompatDelegate.setDefaultNightMode(selectedThemeMode);
+                    updateDarkModeText(selectedThemeMode);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void updateDarkModeText(int themeMode) {
+        if (tvDarkModeValue != null) {
+            if (themeMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                tvDarkModeValue.setText("System Default");
+            } else if (themeMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                tvDarkModeValue.setText("Dark");
+            } else {
+                tvDarkModeValue.setText("Light");
+            }
+        }
     }
 }

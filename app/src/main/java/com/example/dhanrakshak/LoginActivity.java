@@ -27,12 +27,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        super.onCreate(savedInstanceState);
-
-        // Initialize sharedPreferences first
+        // Apply saved theme preference on startup
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+        int savedTheme = sharedPreferences.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(savedTheme);
+
+        super.onCreate(savedInstanceState);
 
         // Check if user is already logged in
         boolean isRemembered = sharedPreferences.getBoolean("remember", false);
