@@ -35,9 +35,9 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
 
         holder.tvGoalName.setText(goal.getName());
-        holder.tvGoalTarget.setText("Target: " + nf.format(goal.getTargetAmount()));
-        holder.tvGoalSaved.setText(nf.format(goal.getSavedAmount()));
-        holder.tvGoalRemaining.setText(nf.format(goal.getRemainingAmount()));
+        holder.tvGoalTarget.setText(String.format("Target: ₹%.0f", goal.getTargetAmount()));
+        holder.tvGoalSaved.setText(String.format("₹%.0f", goal.getSavedAmount()));
+        holder.tvGoalRemaining.setText(String.format("₹%.0f", goal.getRemainingAmount()));
         holder.goalProgressBar.setProgress(goal.getProgressPercent());
     }
 
