@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GOALS = "goals";
 
     public static final String DATABASE_NAME = "DhanRakshak.db";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
 
     // Table and Column Names
     public static final String TABLE_USERS = "users";
@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PAYMENT_METHOD = "payment_method";
     public static final String COLUMN_NOTES = "notes";
     public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_TIMESTAMP = "timestamp";
 
     // Goals columns
     public static final String COLUMN_GOAL_NAME = "name";
@@ -59,7 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATE + " TEXT, " +
                 COLUMN_CATEGORY + " TEXT, " +
                 COLUMN_NOTES + " TEXT, " +
-                COLUMN_TYPE + " TEXT)");
+                COLUMN_TYPE + " TEXT, " +
+                COLUMN_TIMESTAMP + " TEXT DEFAULT '0')");
 
         // Expense Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSE + " (" +
@@ -70,7 +72,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_CATEGORY + " TEXT, " +
                 COLUMN_PAYMENT_METHOD + " TEXT, " +
                 COLUMN_NOTES + " TEXT, " +
-                COLUMN_TYPE + " TEXT)");
+                COLUMN_TYPE + " TEXT, " +
+                COLUMN_TIMESTAMP + " TEXT DEFAULT '0')");
 
         // Goals Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_GOALS + " (" +
@@ -113,6 +116,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_TARGET_AMOUNT + " REAL, " +
                     COLUMN_SAVED_AMOUNT + " REAL DEFAULT 0, " +
                     COLUMN_CREATED_DATE + " TEXT)");
+        }
+        if (oldVersion < 6) {
+            if (!columnExists(db, TABLE_INCOME, COLUMN_TIMESTAMP)) {
+                db.execSQL("ALTER TABLE " + TABLE_INCOME + " ADD COLUMN " + COLUMN_TIMESTAMP + " TEXT DEFAULT '0'");
+            }
+            if (!columnExists(db, TABLE_EXPENSE, COLUMN_TIMESTAMP)) {
+                db.execSQL("ALTER TABLE " + TABLE_EXPENSE + " ADD COLUMN " + COLUMN_TIMESTAMP + " TEXT DEFAULT '0'");
+            }
         }
     }
 
@@ -157,6 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_DATE, date);
         values.put(COLUMN_NOTES, notes);
         values.put(COLUMN_TYPE, "Income");
+        values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
         long result = db.insert(TABLE_INCOME, null, values);
         return result != -1;
     }
@@ -170,6 +182,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_NOTES, notes);
         values.put(COLUMN_PAYMENT_METHOD, paymentMethod);
         values.put(COLUMN_TYPE, "Expense");
+        values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
         return db.insert(TABLE_EXPENSE, null, values) != -1;
     }
 
@@ -219,38 +232,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<TransactionModel> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
+        String incomeQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_AMOUNT + ", " + COLUMN_DATE
+                + ", " + COLUMN_TIMESTAMP + ", 'Income' as " + COLUMN_TYPE + " FROM " + TABLE_INCOME;
+        String expenseQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_TITLE + ", " + COLUMN_AMOUNT + ", " + COLUMN_DATE
+                + ", " + COLUMN_TIMESTAMP + ", 'Expense' as " + COLUMN_TYPE + " FROM " + TABLE_EXPENSE;
+        String orderBy = " ORDER BY " + COLUMN_DATE + " DESC, " + COLUMN_TIMESTAMP + " DESC";
+
+        Cursor cursor = null;
+
         if ("All".equals(filterType) || filterType == null) {
-            addTransactionsFromTable(list, db, TABLE_INCOME, "Income");
-            addTransactionsFromTable(list, db, TABLE_EXPENSE, "Expense");
+            String query = incomeQuery + " UNION ALL " + expenseQuery + orderBy;
+            cursor = db.rawQuery(query, null);
         } else if ("Income".equals(filterType)) {
-            addTransactionsFromTable(list, db, TABLE_INCOME, "Income");
+            cursor = db.rawQuery(incomeQuery + orderBy, null);
         } else if ("Expense".equals(filterType)) {
-            addTransactionsFromTable(list, db, TABLE_EXPENSE, "Expense");
+            cursor = db.rawQuery(expenseQuery + orderBy, null);
         }
 
-        // Sort by date descending
-        list.sort((a, b) -> {
-            if (a.getDate() == null || b.getDate() == null)
-                return 0;
-            return b.getDate().compareTo(a.getDate());
-        });
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
+                String amount = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                String date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+                String type = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE));
+                TransactionModel model = new TransactionModel(id, type, title, amount, date);
+                list.add(model);
+            }
+            cursor.close();
+        }
 
         return list;
-    }
-
-    @SuppressLint("Range")
-    private void addTransactionsFromTable(List<TransactionModel> list, SQLiteDatabase db, String tableName,
-            String type) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " ORDER BY " + COLUMN_DATE + " DESC", null);
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-            String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
-            String amount = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
-            String date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
-            TransactionModel model = new TransactionModel(id, type, title, amount, date);
-            list.add(model);
-        }
-        cursor.close();
     }
 
     // Get recent transactions (for HomeFragment)
